@@ -139,53 +139,165 @@ export const GroupIndeterminateSimple = storyTemplate<CheckboxProps>(args => {
   );
 })({ size: "sm" });
 
-export const GroupIndeterminateComplex = storyTemplate<CheckboxProps>(args => {
-  const values = React.useMemo(() => ["Apple", "Orange", "Watermelon"], []);
+const useGroupCheckbox = (items: string[]) => {
   const [itemState, setItemState] = React.useState<CheckboxStatus>([]);
   const [groupState, setGroupState] = React.useState<CheckboxStatus>(false);
 
   // updates items when group is toggled
   React.useEffect(() => {
     if (groupState === true) {
-      setItemState(values);
+      setItemState(items);
     } else if (groupState === false) {
       setItemState([]);
     }
-  }, [groupState, values]);
+  }, [groupState, items]);
 
   // updates group when items is toggled
   React.useEffect(() => {
     if (!Array.isArray(itemState)) return;
 
-    if (itemState.length === values.length) {
+    if (itemState.length === items.length) {
       setGroupState(true);
     } else if (itemState.length) {
       setGroupState("indeterminate");
     } else {
       setGroupState(false);
     }
-  }, [itemState, values]);
+  }, [itemState, items]);
+
+  return {
+    items,
+    groupState,
+    setGroupState,
+    itemState,
+    setItemState,
+    isGroupChecked: itemState === true,
+  };
+};
+
+const GroupCheckbox: React.FC<{
+  values: any[];
+  title: string;
+  parent?: string;
+  parentItems?: any[];
+  parentItemState?: CheckboxStatus;
+  parentGroupState?: CheckboxStatus[];
+  setParentItemState?: (v: any) => void;
+  setParentGroup?: (v: any) => void;
+}> = ({
+  values,
+  title,
+  parent,
+  parentItems,
+  parentItemState,
+  parentGroupState,
+  setParentItemState,
+  setParentGroup,
+}) => {
+  const {
+    items,
+    groupState,
+    itemState,
+    setGroupState,
+    setItemState,
+    isGroupChecked,
+  } = useGroupCheckbox(values);
+
+  if (title === "fruits") {
+    console.log({ title, isGroupChecked, items, itemState });
+  }
+
+  React.useEffect(() => {
+    if (parentItemState && parentGroupState) {
+      setGroupState(parentItemState);
+      setItemState(parentItemState);
+    }
+  }, [parentItemState, parentGroupState, setGroupState, setItemState]);
+
+  // React.useEffect(() => {
+  //   if (itemState && setParentGroup && setParentItemState) {
+  //     setParentGroup(groupState);
+  //     setParentItemState(itemState);
+  //   }
+  // }, [
+  //   groupState,
+  //   itemState,
+  //   parentItemState,
+  //   setParentGroup,
+  //   setParentItemState,
+  // ]);
 
   return (
     <>
-      <Checkbox state={groupState} onStateChange={setGroupState} {...args}>
-        Fruits
+      <Checkbox
+        state={groupState}
+        onStateChange={e => {
+          setGroupState(e);
+        }}
+      >
+        {title}
       </Checkbox>
       <div className="flex flex-col pl-6 mt-1">
-        {values.map((value, i) => {
+        {items.map((value, i) => {
+          if (typeof value !== "string") {
+            return (
+              <>
+                {React.cloneElement(value, {
+                  key: i,
+                  parent: title,
+                  parentGroupState: groupState,
+                  parentItems: items,
+                  parentItemState: itemState,
+                  setParentItemState: setItemState,
+                  setParentGroup: setGroupState,
+                })}
+              </>
+            );
+          }
           return (
             <Checkbox
               key={i}
               state={itemState}
               onStateChange={setItemState}
               value={value}
-              {...args}
             >
               {value}
             </Checkbox>
           );
         })}
       </div>
+    </>
+  );
+};
+
+export const GroupIndeterminateComplex = storyTemplate<CheckboxProps>(args => {
+  return (
+    <>
+      <GroupCheckbox
+        title="fruits"
+        values={[
+          "Apple",
+          "Orange",
+          <GroupCheckbox
+            title="numbers"
+            values={[
+              "One",
+              "Two",
+              <GroupCheckbox
+                title="numbers"
+                values={[
+                  <GroupCheckbox
+                    title="numbers"
+                    values={["One", "Two", "Three"]}
+                  />,
+                  "Two",
+                  "Three",
+                ]}
+              />,
+            ]}
+          />,
+        ]}
+      />
     </>
   );
 })({ size: "sm" });
