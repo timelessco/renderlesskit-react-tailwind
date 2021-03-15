@@ -5,6 +5,7 @@ const {
 } = require("jest-matcher-utils");
 const { toHaveNoViolations: axeMatchers } = require("jest-axe");
 const matchers = require("@testing-library/jest-dom/matchers");
+const { configureToMatchImageSnapshot } = require("jest-image-snapshot");
 
 // Consider [aria-activedescendant="${id}"] #${id} as the focused element.
 function toHaveFocus(element) {
@@ -31,4 +32,15 @@ function toHaveFocus(element) {
   };
 }
 
-expect.extend({ ...matchers, ...axeMatchers, toHaveFocus });
+const toMatchImageSnapshot = configureToMatchImageSnapshot({
+  failureThreshold: 0.01,
+  failureThresholdType: "percent",
+});
+expect.extend({ toMatchImageSnapshot });
+
+expect.extend({
+  ...matchers,
+  ...axeMatchers,
+  toHaveFocus,
+  toMatchImageSnapshot,
+});
