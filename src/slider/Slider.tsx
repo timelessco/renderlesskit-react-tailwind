@@ -23,6 +23,8 @@ const [SliderStateProvider, useSliderContext] = createContext<
   strict: false,
 });
 
+export { SliderStateProvider };
+
 const [SliderPropsContext, useSliderPropsContext] = createContext<
   Pick<SliderProps, "orientation" | "size" | "origin" | "showMinMax"> & {
     thumbSize: React.MutableRefObject<{
