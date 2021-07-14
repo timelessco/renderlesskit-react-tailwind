@@ -87,6 +87,7 @@ export const Textarea = forwardRefWithAs<
       />
       <Box
         as="textarea"
+        data-testid="testid-shadow-input"
         ref={shadowRef}
         aria-hidden
         readOnly

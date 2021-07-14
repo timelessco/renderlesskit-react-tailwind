@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Textarea should render correctly 1`] = `
+<DocumentFragment>
+  <textarea
+    class="lib:border lib:border-gray-300 lib:rounded lib:shadow-sm lib:p-3 lib:placeholder-gray-400 lib:text-xs lib:text-gray-800 lib:bg-white lib:hover:border-gray-400 lib:focus:outline-none lib:focus:border-blue-500 lib:focus:shadow-input lib:disabled:bg-gray-100 lib:disabled:border-gray-300 lib:disabled:text-gray-400 lib:disabled:cursor-not-allowed lib:resize-x"
+    rows="1"
+    style="height: 0px; overflow: hidden;"
+  />
+  <textarea
+    aria-hidden="true"
+    class="lib:border lib:border-gray-300 lib:rounded lib:shadow-sm lib:p-3 lib:placeholder-gray-400 lib:text-xs lib:text-gray-800 lib:bg-white lib:hover:border-gray-400 lib:focus:outline-none lib:focus:border-blue-500 lib:focus:shadow-input lib:disabled:bg-gray-100 lib:disabled:border-gray-300 lib:disabled:text-gray-400 lib:disabled:cursor-not-allowed lib:resize-x lib:invisible lib:absolute overflow-hidden h-0 top-0 left-0 transform-gpu"
+    data-testid="testid-shadow-input"
+    readonly=""
+    tabindex="-1"
+  />
+</DocumentFragment>
+`;
